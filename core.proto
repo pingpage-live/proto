@@ -1,0 +1,225 @@
+syntax = "proto3";
+
+package corepb;
+
+option go_package = "pingpage/proto/gen/corepb";
+
+import "google/protobuf/timestamp.proto";
+
+// ─── Messages ───────────────────────────────────────────────────────────────
+
+message Organization {
+  string id = 1;
+  string name = 2;
+  string slug = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message Component {
+  string id = 1;
+  string organization_id = 2;
+  string name = 3;
+  string description = 4;
+  string status = 5; // operational, degraded_performance, partial_outage, major_outage
+  int32 position = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message Incident {
+  string id = 1;
+  string organization_id = 2;
+  string title = 3;
+  string status = 4; // investigating, identified, monitoring, resolved
+  string impact = 5; // none, minor, major, critical
+  google.protobuf.Timestamp started_at = 6;
+  google.protobuf.Timestamp resolved_at = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+  repeated IncidentUpdate updates = 10;
+  repeated string component_ids = 11;
+}
+
+message IncidentUpdate {
+  string id = 1;
+  string incident_id = 2;
+  string status = 3;
+  string body = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message Subscriber {
+  string id = 1;
+  string organization_id = 2;
+  string email = 3;
+  bool confirmed = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message Monitor {
+  string id = 1;
+  string component_id = 2;
+  string url = 3;
+  string method = 4;
+  int32 interval_seconds = 5;
+  int32 timeout_seconds = 6;
+  bool enabled = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+message UptimeDaily {
+  string component_id = 1;
+  string date = 2; // YYYY-MM-DD
+  int32 total_checks = 3;
+  int32 successful_checks = 4;
+  double uptime_percentage = 5;
+}
+
+message Notification {
+  string id = 1;
+  string subscriber_id = 2;
+  string incident_id = 3;
+  string channel = 4; // email
+  string status = 5;  // pending, sent, failed
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp sent_at = 7;
+}
+
+message PingResult {
+  string monitor_id = 1;
+  int32 status_code = 2;
+  int64 response_time_ms = 3;
+  bool success = 4;
+  string error = 5;
+  google.protobuf.Timestamp checked_at = 6;
+}
+
+// ─── Status Service (used by status/public pages) ───────────────────────────
+
+service StatusService {
+  rpc GetOrganizationBySlug(GetOrganizationBySlugRequest) returns (GetOrganizationBySlugResponse);
+  rpc ListComponentsByOrganization(ListComponentsByOrganizationRequest) returns (ListComponentsByOrganizationResponse);
+  rpc ListIncidentsByOrganization(ListIncidentsByOrganizationRequest) returns (ListIncidentsByOrganizationResponse);
+  rpc GetComponentUptime(GetComponentUptimeRequest) returns (GetComponentUptimeResponse);
+}
+
+message GetOrganizationBySlugRequest {
+  string slug = 1;
+}
+
+message GetOrganizationBySlugResponse {
+  Organization organization = 1;
+}
+
+message ListComponentsByOrganizationRequest {
+  string organization_id = 1;
+}
+
+message ListComponentsByOrganizationResponse {
+  repeated Component components = 1;
+}
+
+message ListIncidentsByOrganizationRequest {
+  string organization_id = 1;
+  int32 limit = 2;
+}
+
+message ListIncidentsByOrganizationResponse {
+  repeated Incident incidents = 1;
+}
+
+message GetComponentUptimeRequest {
+  string component_id = 1;
+  int32 days = 2;
+}
+
+message GetComponentUptimeResponse {
+  repeated UptimeDaily uptimes = 1;
+}
+
+// ─── Worker Service (used by worker for monitoring) ─────────────────────────
+
+service WorkerService {
+  rpc ListActiveMonitors(ListActiveMonitorsRequest) returns (ListActiveMonitorsResponse);
+  rpc RecordPingResult(RecordPingResultRequest) returns (RecordPingResultResponse);
+  rpc UpdateComponentStatus(UpdateComponentStatusRequest) returns (UpdateComponentStatusResponse);
+  rpc CreateAutoIncident(CreateAutoIncidentRequest) returns (CreateAutoIncidentResponse);
+  rpc CalculateUptimeDaily(CalculateUptimeDailyRequest) returns (CalculateUptimeDailyResponse);
+}
+
+message ListActiveMonitorsRequest {}
+
+message ListActiveMonitorsResponse {
+  repeated Monitor monitors = 1;
+}
+
+message RecordPingResultRequest {
+  PingResult result = 1;
+}
+
+message RecordPingResultResponse {}
+
+message UpdateComponentStatusRequest {
+  string component_id = 1;
+  string status = 2;
+}
+
+message UpdateComponentStatusResponse {}
+
+message CreateAutoIncidentRequest {
+  string component_id = 1;
+  string title = 2;
+  string impact = 3;
+}
+
+message CreateAutoIncidentResponse {
+  Incident incident = 1;
+}
+
+message CalculateUptimeDailyRequest {
+  string date = 1; // YYYY-MM-DD
+}
+
+message CalculateUptimeDailyResponse {}
+
+// ─── Alerter Service (used by alerter for notifications) ────────────────────
+
+service AlerterService {
+  rpc ListPendingNotifications(ListPendingNotificationsRequest) returns (ListPendingNotificationsResponse);
+  rpc UpdateNotificationStatus(UpdateNotificationStatusRequest) returns (UpdateNotificationStatusResponse);
+  rpc GetSubscribersByOrganization(GetSubscribersByOrganizationRequest) returns (GetSubscribersByOrganizationResponse);
+  rpc GetIncident(GetIncidentRequest) returns (GetIncidentResponse);
+}
+
+message ListPendingNotificationsRequest {
+  int32 limit = 1;
+}
+
+message ListPendingNotificationsResponse {
+  repeated Notification notifications = 1;
+}
+
+message UpdateNotificationStatusRequest {
+  string notification_id = 1;
+  string status = 2; // sent, failed
+}
+
+message UpdateNotificationStatusResponse {}
+
+message GetSubscribersByOrganizationRequest {
+  string organization_id = 1;
+}
+
+message GetSubscribersByOrganizationResponse {
+  repeated Subscriber subscribers = 1;
+}
+
+message GetIncidentRequest {
+  string incident_id = 1;
+}
+
+message GetIncidentResponse {
+  Incident incident = 1;
+}
