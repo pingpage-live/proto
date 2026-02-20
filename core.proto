@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package corepb;
 
-option go_package = "pingpage/proto/gen/corepb";
+option go_package = "github.com/pingpage-live/proto/gen/corepb";
 
 import "google/protobuf/timestamp.proto";
 
