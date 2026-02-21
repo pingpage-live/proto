@@ -2154,7 +2154,7 @@ const file_core_proto_rawDesc = "" +
 	"\x18ListPendingNotifications\x12'.corepb.ListPendingNotificationsRequest\x1a(.corepb.ListPendingNotificationsResponse\x12m\n" +
 	"\x18UpdateNotificationStatus\x12'.corepb.UpdateNotificationStatusRequest\x1a(.corepb.UpdateNotificationStatusResponse\x12y\n" +
 	"\x1cGetSubscribersByOrganization\x12+.corepb.GetSubscribersByOrganizationRequest\x1a,.corepb.GetSubscribersByOrganizationResponse\x12F\n" +
-	"\vGetIncident\x12\x1a.corepb.GetIncidentRequest\x1a\x1b.corepb.GetIncidentResponseB\x1bZ\x19github.com/pingpage-live/proto/gen/corepbb\x06proto3"
+	"\vGetIncident\x12\x1a.corepb.GetIncidentRequest\x1a\x1b.corepb.GetIncidentResponseB+Z)github.com/pingpage-live/proto/gen/corepbb\x06proto3"
 
 var (
 	file_core_proto_rawDescOnce sync.Once
