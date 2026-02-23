@@ -2138,12 +2138,13 @@ const file_core_proto_rawDesc = "" +
 	"\vincident_id\x18\x01 \x01(\tR\n" +
 	"incidentId\"C\n" +
 	"\x13GetIncidentResponse\x12,\n" +
-	"\bincident\x18\x01 \x01(\v2\x10.corepb.IncidentR\bincident2\xc5\x03\n" +
+	"\bincident\x18\x01 \x01(\v2\x10.corepb.IncidentR\bincident2\x8d\x04\n" +
 	"\rStatusService\x12d\n" +
 	"\x15GetOrganizationBySlug\x12$.corepb.GetOrganizationBySlugRequest\x1a%.corepb.GetOrganizationBySlugResponse\x12y\n" +
 	"\x1cListComponentsByOrganization\x12+.corepb.ListComponentsByOrganizationRequest\x1a,.corepb.ListComponentsByOrganizationResponse\x12v\n" +
 	"\x1bListIncidentsByOrganization\x12*.corepb.ListIncidentsByOrganizationRequest\x1a+.corepb.ListIncidentsByOrganizationResponse\x12[\n" +
-	"\x12GetComponentUptime\x12!.corepb.GetComponentUptimeRequest\x1a\".corepb.GetComponentUptimeResponse2\xe9\x03\n" +
+	"\x12GetComponentUptime\x12!.corepb.GetComponentUptimeRequest\x1a\".corepb.GetComponentUptimeResponse\x12F\n" +
+	"\vGetIncident\x12\x1a.corepb.GetIncidentRequest\x1a\x1b.corepb.GetIncidentResponse2\xe9\x03\n" +
 	"\rWorkerService\x12[\n" +
 	"\x12ListActiveMonitors\x12!.corepb.ListActiveMonitorsRequest\x1a\".corepb.ListActiveMonitorsResponse\x12U\n" +
 	"\x10RecordPingResult\x12\x1f.corepb.RecordPingResultRequest\x1a .corepb.RecordPingResultResponse\x12d\n" +
@@ -2238,30 +2239,32 @@ var file_core_proto_depIdxs = []int32{
 	11, // 27: corepb.StatusService.ListComponentsByOrganization:input_type -> corepb.ListComponentsByOrganizationRequest
 	13, // 28: corepb.StatusService.ListIncidentsByOrganization:input_type -> corepb.ListIncidentsByOrganizationRequest
 	15, // 29: corepb.StatusService.GetComponentUptime:input_type -> corepb.GetComponentUptimeRequest
-	17, // 30: corepb.WorkerService.ListActiveMonitors:input_type -> corepb.ListActiveMonitorsRequest
-	19, // 31: corepb.WorkerService.RecordPingResult:input_type -> corepb.RecordPingResultRequest
-	21, // 32: corepb.WorkerService.UpdateComponentStatus:input_type -> corepb.UpdateComponentStatusRequest
-	23, // 33: corepb.WorkerService.CreateAutoIncident:input_type -> corepb.CreateAutoIncidentRequest
-	25, // 34: corepb.WorkerService.CalculateUptimeDaily:input_type -> corepb.CalculateUptimeDailyRequest
-	27, // 35: corepb.AlerterService.ListPendingNotifications:input_type -> corepb.ListPendingNotificationsRequest
-	29, // 36: corepb.AlerterService.UpdateNotificationStatus:input_type -> corepb.UpdateNotificationStatusRequest
-	31, // 37: corepb.AlerterService.GetSubscribersByOrganization:input_type -> corepb.GetSubscribersByOrganizationRequest
-	33, // 38: corepb.AlerterService.GetIncident:input_type -> corepb.GetIncidentRequest
-	10, // 39: corepb.StatusService.GetOrganizationBySlug:output_type -> corepb.GetOrganizationBySlugResponse
-	12, // 40: corepb.StatusService.ListComponentsByOrganization:output_type -> corepb.ListComponentsByOrganizationResponse
-	14, // 41: corepb.StatusService.ListIncidentsByOrganization:output_type -> corepb.ListIncidentsByOrganizationResponse
-	16, // 42: corepb.StatusService.GetComponentUptime:output_type -> corepb.GetComponentUptimeResponse
-	18, // 43: corepb.WorkerService.ListActiveMonitors:output_type -> corepb.ListActiveMonitorsResponse
-	20, // 44: corepb.WorkerService.RecordPingResult:output_type -> corepb.RecordPingResultResponse
-	22, // 45: corepb.WorkerService.UpdateComponentStatus:output_type -> corepb.UpdateComponentStatusResponse
-	24, // 46: corepb.WorkerService.CreateAutoIncident:output_type -> corepb.CreateAutoIncidentResponse
-	26, // 47: corepb.WorkerService.CalculateUptimeDaily:output_type -> corepb.CalculateUptimeDailyResponse
-	28, // 48: corepb.AlerterService.ListPendingNotifications:output_type -> corepb.ListPendingNotificationsResponse
-	30, // 49: corepb.AlerterService.UpdateNotificationStatus:output_type -> corepb.UpdateNotificationStatusResponse
-	32, // 50: corepb.AlerterService.GetSubscribersByOrganization:output_type -> corepb.GetSubscribersByOrganizationResponse
-	34, // 51: corepb.AlerterService.GetIncident:output_type -> corepb.GetIncidentResponse
-	39, // [39:52] is the sub-list for method output_type
-	26, // [26:39] is the sub-list for method input_type
+	33, // 30: corepb.StatusService.GetIncident:input_type -> corepb.GetIncidentRequest
+	17, // 31: corepb.WorkerService.ListActiveMonitors:input_type -> corepb.ListActiveMonitorsRequest
+	19, // 32: corepb.WorkerService.RecordPingResult:input_type -> corepb.RecordPingResultRequest
+	21, // 33: corepb.WorkerService.UpdateComponentStatus:input_type -> corepb.UpdateComponentStatusRequest
+	23, // 34: corepb.WorkerService.CreateAutoIncident:input_type -> corepb.CreateAutoIncidentRequest
+	25, // 35: corepb.WorkerService.CalculateUptimeDaily:input_type -> corepb.CalculateUptimeDailyRequest
+	27, // 36: corepb.AlerterService.ListPendingNotifications:input_type -> corepb.ListPendingNotificationsRequest
+	29, // 37: corepb.AlerterService.UpdateNotificationStatus:input_type -> corepb.UpdateNotificationStatusRequest
+	31, // 38: corepb.AlerterService.GetSubscribersByOrganization:input_type -> corepb.GetSubscribersByOrganizationRequest
+	33, // 39: corepb.AlerterService.GetIncident:input_type -> corepb.GetIncidentRequest
+	10, // 40: corepb.StatusService.GetOrganizationBySlug:output_type -> corepb.GetOrganizationBySlugResponse
+	12, // 41: corepb.StatusService.ListComponentsByOrganization:output_type -> corepb.ListComponentsByOrganizationResponse
+	14, // 42: corepb.StatusService.ListIncidentsByOrganization:output_type -> corepb.ListIncidentsByOrganizationResponse
+	16, // 43: corepb.StatusService.GetComponentUptime:output_type -> corepb.GetComponentUptimeResponse
+	34, // 44: corepb.StatusService.GetIncident:output_type -> corepb.GetIncidentResponse
+	18, // 45: corepb.WorkerService.ListActiveMonitors:output_type -> corepb.ListActiveMonitorsResponse
+	20, // 46: corepb.WorkerService.RecordPingResult:output_type -> corepb.RecordPingResultResponse
+	22, // 47: corepb.WorkerService.UpdateComponentStatus:output_type -> corepb.UpdateComponentStatusResponse
+	24, // 48: corepb.WorkerService.CreateAutoIncident:output_type -> corepb.CreateAutoIncidentResponse
+	26, // 49: corepb.WorkerService.CalculateUptimeDaily:output_type -> corepb.CalculateUptimeDailyResponse
+	28, // 50: corepb.AlerterService.ListPendingNotifications:output_type -> corepb.ListPendingNotificationsResponse
+	30, // 51: corepb.AlerterService.UpdateNotificationStatus:output_type -> corepb.UpdateNotificationStatusResponse
+	32, // 52: corepb.AlerterService.GetSubscribersByOrganization:output_type -> corepb.GetSubscribersByOrganizationResponse
+	34, // 53: corepb.AlerterService.GetIncident:output_type -> corepb.GetIncidentResponse
+	40, // [40:54] is the sub-list for method output_type
+	26, // [26:40] is the sub-list for method input_type
 	26, // [26:26] is the sub-list for extension type_name
 	26, // [26:26] is the sub-list for extension extendee
 	0,  // [0:26] is the sub-list for field type_name

@@ -23,6 +23,7 @@ const (
 	StatusService_ListComponentsByOrganization_FullMethodName = "/corepb.StatusService/ListComponentsByOrganization"
 	StatusService_ListIncidentsByOrganization_FullMethodName  = "/corepb.StatusService/ListIncidentsByOrganization"
 	StatusService_GetComponentUptime_FullMethodName           = "/corepb.StatusService/GetComponentUptime"
+	StatusService_GetIncident_FullMethodName                  = "/corepb.StatusService/GetIncident"
 )
 
 // StatusServiceClient is the client API for StatusService service.
@@ -33,6 +34,7 @@ type StatusServiceClient interface {
 	ListComponentsByOrganization(ctx context.Context, in *ListComponentsByOrganizationRequest, opts ...grpc.CallOption) (*ListComponentsByOrganizationResponse, error)
 	ListIncidentsByOrganization(ctx context.Context, in *ListIncidentsByOrganizationRequest, opts ...grpc.CallOption) (*ListIncidentsByOrganizationResponse, error)
 	GetComponentUptime(ctx context.Context, in *GetComponentUptimeRequest, opts ...grpc.CallOption) (*GetComponentUptimeResponse, error)
+	GetIncident(ctx context.Context, in *GetIncidentRequest, opts ...grpc.CallOption) (*GetIncidentResponse, error)
 }
 
 type statusServiceClient struct {
@@ -83,6 +85,16 @@ func (c *statusServiceClient) GetComponentUptime(ctx context.Context, in *GetCom
 	return out, nil
 }
 
+func (c *statusServiceClient) GetIncident(ctx context.Context, in *GetIncidentRequest, opts ...grpc.CallOption) (*GetIncidentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetIncidentResponse)
+	err := c.cc.Invoke(ctx, StatusService_GetIncident_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StatusServiceServer is the server API for StatusService service.
 // All implementations must embed UnimplementedStatusServiceServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type StatusServiceServer interface {
 	ListComponentsByOrganization(context.Context, *ListComponentsByOrganizationRequest) (*ListComponentsByOrganizationResponse, error)
 	ListIncidentsByOrganization(context.Context, *ListIncidentsByOrganizationRequest) (*ListIncidentsByOrganizationResponse, error)
 	GetComponentUptime(context.Context, *GetComponentUptimeRequest) (*GetComponentUptimeResponse, error)
+	GetIncident(context.Context, *GetIncidentRequest) (*GetIncidentResponse, error)
 	mustEmbedUnimplementedStatusServiceServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedStatusServiceServer) ListIncidentsByOrganization(context.Cont
 }
 func (UnimplementedStatusServiceServer) GetComponentUptime(context.Context, *GetComponentUptimeRequest) (*GetComponentUptimeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetComponentUptime not implemented")
+}
+func (UnimplementedStatusServiceServer) GetIncident(context.Context, *GetIncidentRequest) (*GetIncidentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetIncident not implemented")
 }
 func (UnimplementedStatusServiceServer) mustEmbedUnimplementedStatusServiceServer() {}
 func (UnimplementedStatusServiceServer) testEmbeddedByValue()                       {}
@@ -206,6 +222,24 @@ func _StatusService_GetComponentUptime_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StatusService_GetIncident_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIncidentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatusServiceServer).GetIncident(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StatusService_GetIncident_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatusServiceServer).GetIncident(ctx, req.(*GetIncidentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StatusService_ServiceDesc is the grpc.ServiceDesc for StatusService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var StatusService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetComponentUptime",
 			Handler:    _StatusService_GetComponentUptime_Handler,
+		},
+		{
+			MethodName: "GetIncident",
+			Handler:    _StatusService_GetIncident_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

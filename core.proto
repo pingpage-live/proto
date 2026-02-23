@@ -103,6 +103,7 @@ service StatusService {
   rpc ListComponentsByOrganization(ListComponentsByOrganizationRequest) returns (ListComponentsByOrganizationResponse);
   rpc ListIncidentsByOrganization(ListIncidentsByOrganizationRequest) returns (ListIncidentsByOrganizationResponse);
   rpc GetComponentUptime(GetComponentUptimeRequest) returns (GetComponentUptimeResponse);
+  rpc GetIncident(GetIncidentRequest) returns (GetIncidentResponse);
 }
 
 message GetOrganizationBySlugRequest {
