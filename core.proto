@@ -100,6 +100,7 @@ message PingResult {
 
 service StatusService {
   rpc GetOrganizationBySlug(GetOrganizationBySlugRequest) returns (GetOrganizationBySlugResponse);
+  rpc GetOrganizationByCustomDomain(GetOrganizationByCustomDomainRequest) returns (GetOrganizationByCustomDomainResponse);
   rpc ListComponentsByOrganization(ListComponentsByOrganizationRequest) returns (ListComponentsByOrganizationResponse);
   rpc ListIncidentsByOrganization(ListIncidentsByOrganizationRequest) returns (ListIncidentsByOrganizationResponse);
   rpc GetComponentUptime(GetComponentUptimeRequest) returns (GetComponentUptimeResponse);
@@ -111,6 +112,14 @@ message GetOrganizationBySlugRequest {
 }
 
 message GetOrganizationBySlugResponse {
+  Organization organization = 1;
+}
+
+message GetOrganizationByCustomDomainRequest {
+  string domain = 1;
+}
+
+message GetOrganizationByCustomDomainResponse {
   Organization organization = 1;
 }
 
