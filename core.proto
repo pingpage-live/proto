@@ -79,12 +79,25 @@ message UptimeDaily {
 
 message Notification {
   string id = 1;
-  string subscriber_id = 2;
+  string subscriber_id = 2;            // set for email notifications
   string incident_id = 3;
-  string channel = 4; // email
-  string status = 5;  // pending, sent, failed
+  string channel = 4;                  // email, webhook
+  string status = 5;                   // pending, sent, failed
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp sent_at = 7;
+  string notification_channel_id = 8;  // set for webhook notifications
+  string error_message = 9;
+}
+
+message NotificationChannel {
+  string id = 1;
+  string organization_id = 2;
+  string type = 3;          // email, webhook
+  string name = 4;
+  string config_json = 5;   // JSON string of channel config
+  bool enabled = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 
 message PingResult {
@@ -201,6 +214,7 @@ service AlerterService {
   rpc UpdateNotificationStatus(UpdateNotificationStatusRequest) returns (UpdateNotificationStatusResponse);
   rpc GetSubscribersByOrganization(GetSubscribersByOrganizationRequest) returns (GetSubscribersByOrganizationResponse);
   rpc GetIncident(GetIncidentRequest) returns (GetIncidentResponse);
+  rpc GetNotificationChannel(GetNotificationChannelRequest) returns (GetNotificationChannelResponse);
 }
 
 message ListPendingNotificationsRequest {
@@ -214,6 +228,7 @@ message ListPendingNotificationsResponse {
 message UpdateNotificationStatusRequest {
   string notification_id = 1;
   string status = 2; // sent, failed
+  string error_message = 3;
 }
 
 message UpdateNotificationStatusResponse {}
@@ -232,4 +247,12 @@ message GetIncidentRequest {
 
 message GetIncidentResponse {
   Incident incident = 1;
+}
+
+message GetNotificationChannelRequest {
+  string channel_id = 1;
+}
+
+message GetNotificationChannelResponse {
+  NotificationChannel channel = 1;
 }

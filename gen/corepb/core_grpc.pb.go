@@ -569,6 +569,7 @@ const (
 	AlerterService_UpdateNotificationStatus_FullMethodName     = "/corepb.AlerterService/UpdateNotificationStatus"
 	AlerterService_GetSubscribersByOrganization_FullMethodName = "/corepb.AlerterService/GetSubscribersByOrganization"
 	AlerterService_GetIncident_FullMethodName                  = "/corepb.AlerterService/GetIncident"
+	AlerterService_GetNotificationChannel_FullMethodName       = "/corepb.AlerterService/GetNotificationChannel"
 )
 
 // AlerterServiceClient is the client API for AlerterService service.
@@ -579,6 +580,7 @@ type AlerterServiceClient interface {
 	UpdateNotificationStatus(ctx context.Context, in *UpdateNotificationStatusRequest, opts ...grpc.CallOption) (*UpdateNotificationStatusResponse, error)
 	GetSubscribersByOrganization(ctx context.Context, in *GetSubscribersByOrganizationRequest, opts ...grpc.CallOption) (*GetSubscribersByOrganizationResponse, error)
 	GetIncident(ctx context.Context, in *GetIncidentRequest, opts ...grpc.CallOption) (*GetIncidentResponse, error)
+	GetNotificationChannel(ctx context.Context, in *GetNotificationChannelRequest, opts ...grpc.CallOption) (*GetNotificationChannelResponse, error)
 }
 
 type alerterServiceClient struct {
@@ -629,6 +631,16 @@ func (c *alerterServiceClient) GetIncident(ctx context.Context, in *GetIncidentR
 	return out, nil
 }
 
+func (c *alerterServiceClient) GetNotificationChannel(ctx context.Context, in *GetNotificationChannelRequest, opts ...grpc.CallOption) (*GetNotificationChannelResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetNotificationChannelResponse)
+	err := c.cc.Invoke(ctx, AlerterService_GetNotificationChannel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AlerterServiceServer is the server API for AlerterService service.
 // All implementations must embed UnimplementedAlerterServiceServer
 // for forward compatibility.
@@ -637,6 +649,7 @@ type AlerterServiceServer interface {
 	UpdateNotificationStatus(context.Context, *UpdateNotificationStatusRequest) (*UpdateNotificationStatusResponse, error)
 	GetSubscribersByOrganization(context.Context, *GetSubscribersByOrganizationRequest) (*GetSubscribersByOrganizationResponse, error)
 	GetIncident(context.Context, *GetIncidentRequest) (*GetIncidentResponse, error)
+	GetNotificationChannel(context.Context, *GetNotificationChannelRequest) (*GetNotificationChannelResponse, error)
 	mustEmbedUnimplementedAlerterServiceServer()
 }
 
@@ -658,6 +671,9 @@ func (UnimplementedAlerterServiceServer) GetSubscribersByOrganization(context.Co
 }
 func (UnimplementedAlerterServiceServer) GetIncident(context.Context, *GetIncidentRequest) (*GetIncidentResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetIncident not implemented")
+}
+func (UnimplementedAlerterServiceServer) GetNotificationChannel(context.Context, *GetNotificationChannelRequest) (*GetNotificationChannelResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetNotificationChannel not implemented")
 }
 func (UnimplementedAlerterServiceServer) mustEmbedUnimplementedAlerterServiceServer() {}
 func (UnimplementedAlerterServiceServer) testEmbeddedByValue()                        {}
@@ -752,6 +768,24 @@ func _AlerterService_GetIncident_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AlerterService_GetNotificationChannel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNotificationChannelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlerterServiceServer).GetNotificationChannel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AlerterService_GetNotificationChannel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlerterServiceServer).GetNotificationChannel(ctx, req.(*GetNotificationChannelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AlerterService_ServiceDesc is the grpc.ServiceDesc for AlerterService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -774,6 +808,10 @@ var AlerterService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetIncident",
 			Handler:    _AlerterService_GetIncident_Handler,
+		},
+		{
+			MethodName: "GetNotificationChannel",
+			Handler:    _AlerterService_GetNotificationChannel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

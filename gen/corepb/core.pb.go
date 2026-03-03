@@ -659,16 +659,18 @@ func (x *UptimeDaily) GetUptimePercentage() float64 {
 }
 
 type Notification struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	SubscriberId  string                 `protobuf:"bytes,2,opt,name=subscriber_id,json=subscriberId,proto3" json:"subscriber_id,omitempty"`
-	IncidentId    string                 `protobuf:"bytes,3,opt,name=incident_id,json=incidentId,proto3" json:"incident_id,omitempty"`
-	Channel       string                 `protobuf:"bytes,4,opt,name=channel,proto3" json:"channel,omitempty"` // email
-	Status        string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`   // pending, sent, failed
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	SentAt        *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=sent_at,json=sentAt,proto3" json:"sent_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	Id                    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	SubscriberId          string                 `protobuf:"bytes,2,opt,name=subscriber_id,json=subscriberId,proto3" json:"subscriber_id,omitempty"` // set for email notifications
+	IncidentId            string                 `protobuf:"bytes,3,opt,name=incident_id,json=incidentId,proto3" json:"incident_id,omitempty"`
+	Channel               string                 `protobuf:"bytes,4,opt,name=channel,proto3" json:"channel,omitempty"` // email, webhook
+	Status                string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`   // pending, sent, failed
+	CreatedAt             *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	SentAt                *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=sent_at,json=sentAt,proto3" json:"sent_at,omitempty"`
+	NotificationChannelId string                 `protobuf:"bytes,8,opt,name=notification_channel_id,json=notificationChannelId,proto3" json:"notification_channel_id,omitempty"` // set for webhook notifications
+	ErrorMessage          string                 `protobuf:"bytes,9,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *Notification) Reset() {
@@ -750,6 +752,120 @@ func (x *Notification) GetSentAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *Notification) GetNotificationChannelId() string {
+	if x != nil {
+		return x.NotificationChannelId
+	}
+	return ""
+}
+
+func (x *Notification) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type NotificationChannel struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizationId string                 `protobuf:"bytes,2,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"`
+	Type           string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"` // email, webhook
+	Name           string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	ConfigJson     string                 `protobuf:"bytes,5,opt,name=config_json,json=configJson,proto3" json:"config_json,omitempty"` // JSON string of channel config
+	Enabled        bool                   `protobuf:"varint,6,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *NotificationChannel) Reset() {
+	*x = NotificationChannel{}
+	mi := &file_core_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NotificationChannel) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NotificationChannel) ProtoMessage() {}
+
+func (x *NotificationChannel) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NotificationChannel.ProtoReflect.Descriptor instead.
+func (*NotificationChannel) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *NotificationChannel) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *NotificationChannel) GetOrganizationId() string {
+	if x != nil {
+		return x.OrganizationId
+	}
+	return ""
+}
+
+func (x *NotificationChannel) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *NotificationChannel) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *NotificationChannel) GetConfigJson() string {
+	if x != nil {
+		return x.ConfigJson
+	}
+	return ""
+}
+
+func (x *NotificationChannel) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *NotificationChannel) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *NotificationChannel) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 type PingResult struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	MonitorId      string                 `protobuf:"bytes,1,opt,name=monitor_id,json=monitorId,proto3" json:"monitor_id,omitempty"`
@@ -764,7 +880,7 @@ type PingResult struct {
 
 func (x *PingResult) Reset() {
 	*x = PingResult{}
-	mi := &file_core_proto_msgTypes[8]
+	mi := &file_core_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -776,7 +892,7 @@ func (x *PingResult) String() string {
 func (*PingResult) ProtoMessage() {}
 
 func (x *PingResult) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[8]
+	mi := &file_core_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -789,7 +905,7 @@ func (x *PingResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PingResult.ProtoReflect.Descriptor instead.
 func (*PingResult) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{8}
+	return file_core_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *PingResult) GetMonitorId() string {
@@ -843,7 +959,7 @@ type GetOrganizationBySlugRequest struct {
 
 func (x *GetOrganizationBySlugRequest) Reset() {
 	*x = GetOrganizationBySlugRequest{}
-	mi := &file_core_proto_msgTypes[9]
+	mi := &file_core_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -855,7 +971,7 @@ func (x *GetOrganizationBySlugRequest) String() string {
 func (*GetOrganizationBySlugRequest) ProtoMessage() {}
 
 func (x *GetOrganizationBySlugRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[9]
+	mi := &file_core_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -868,7 +984,7 @@ func (x *GetOrganizationBySlugRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationBySlugRequest.ProtoReflect.Descriptor instead.
 func (*GetOrganizationBySlugRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{9}
+	return file_core_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetOrganizationBySlugRequest) GetSlug() string {
@@ -887,7 +1003,7 @@ type GetOrganizationBySlugResponse struct {
 
 func (x *GetOrganizationBySlugResponse) Reset() {
 	*x = GetOrganizationBySlugResponse{}
-	mi := &file_core_proto_msgTypes[10]
+	mi := &file_core_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -899,7 +1015,7 @@ func (x *GetOrganizationBySlugResponse) String() string {
 func (*GetOrganizationBySlugResponse) ProtoMessage() {}
 
 func (x *GetOrganizationBySlugResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[10]
+	mi := &file_core_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -912,7 +1028,7 @@ func (x *GetOrganizationBySlugResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizationBySlugResponse.ProtoReflect.Descriptor instead.
 func (*GetOrganizationBySlugResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{10}
+	return file_core_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetOrganizationBySlugResponse) GetOrganization() *Organization {
@@ -931,7 +1047,7 @@ type GetOrganizationByCustomDomainRequest struct {
 
 func (x *GetOrganizationByCustomDomainRequest) Reset() {
 	*x = GetOrganizationByCustomDomainRequest{}
-	mi := &file_core_proto_msgTypes[11]
+	mi := &file_core_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -943,7 +1059,7 @@ func (x *GetOrganizationByCustomDomainRequest) String() string {
 func (*GetOrganizationByCustomDomainRequest) ProtoMessage() {}
 
 func (x *GetOrganizationByCustomDomainRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[11]
+	mi := &file_core_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -956,7 +1072,7 @@ func (x *GetOrganizationByCustomDomainRequest) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use GetOrganizationByCustomDomainRequest.ProtoReflect.Descriptor instead.
 func (*GetOrganizationByCustomDomainRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{11}
+	return file_core_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetOrganizationByCustomDomainRequest) GetDomain() string {
@@ -975,7 +1091,7 @@ type GetOrganizationByCustomDomainResponse struct {
 
 func (x *GetOrganizationByCustomDomainResponse) Reset() {
 	*x = GetOrganizationByCustomDomainResponse{}
-	mi := &file_core_proto_msgTypes[12]
+	mi := &file_core_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -987,7 +1103,7 @@ func (x *GetOrganizationByCustomDomainResponse) String() string {
 func (*GetOrganizationByCustomDomainResponse) ProtoMessage() {}
 
 func (x *GetOrganizationByCustomDomainResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[12]
+	mi := &file_core_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1000,7 +1116,7 @@ func (x *GetOrganizationByCustomDomainResponse) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use GetOrganizationByCustomDomainResponse.ProtoReflect.Descriptor instead.
 func (*GetOrganizationByCustomDomainResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{12}
+	return file_core_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetOrganizationByCustomDomainResponse) GetOrganization() *Organization {
@@ -1019,7 +1135,7 @@ type ListComponentsByOrganizationRequest struct {
 
 func (x *ListComponentsByOrganizationRequest) Reset() {
 	*x = ListComponentsByOrganizationRequest{}
-	mi := &file_core_proto_msgTypes[13]
+	mi := &file_core_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1031,7 +1147,7 @@ func (x *ListComponentsByOrganizationRequest) String() string {
 func (*ListComponentsByOrganizationRequest) ProtoMessage() {}
 
 func (x *ListComponentsByOrganizationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[13]
+	mi := &file_core_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1044,7 +1160,7 @@ func (x *ListComponentsByOrganizationRequest) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use ListComponentsByOrganizationRequest.ProtoReflect.Descriptor instead.
 func (*ListComponentsByOrganizationRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{13}
+	return file_core_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ListComponentsByOrganizationRequest) GetOrganizationId() string {
@@ -1063,7 +1179,7 @@ type ListComponentsByOrganizationResponse struct {
 
 func (x *ListComponentsByOrganizationResponse) Reset() {
 	*x = ListComponentsByOrganizationResponse{}
-	mi := &file_core_proto_msgTypes[14]
+	mi := &file_core_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1075,7 +1191,7 @@ func (x *ListComponentsByOrganizationResponse) String() string {
 func (*ListComponentsByOrganizationResponse) ProtoMessage() {}
 
 func (x *ListComponentsByOrganizationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[14]
+	mi := &file_core_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1088,7 +1204,7 @@ func (x *ListComponentsByOrganizationResponse) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use ListComponentsByOrganizationResponse.ProtoReflect.Descriptor instead.
 func (*ListComponentsByOrganizationResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{14}
+	return file_core_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListComponentsByOrganizationResponse) GetComponents() []*Component {
@@ -1108,7 +1224,7 @@ type ListIncidentsByOrganizationRequest struct {
 
 func (x *ListIncidentsByOrganizationRequest) Reset() {
 	*x = ListIncidentsByOrganizationRequest{}
-	mi := &file_core_proto_msgTypes[15]
+	mi := &file_core_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1120,7 +1236,7 @@ func (x *ListIncidentsByOrganizationRequest) String() string {
 func (*ListIncidentsByOrganizationRequest) ProtoMessage() {}
 
 func (x *ListIncidentsByOrganizationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[15]
+	mi := &file_core_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1133,7 +1249,7 @@ func (x *ListIncidentsByOrganizationRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use ListIncidentsByOrganizationRequest.ProtoReflect.Descriptor instead.
 func (*ListIncidentsByOrganizationRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{15}
+	return file_core_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ListIncidentsByOrganizationRequest) GetOrganizationId() string {
@@ -1159,7 +1275,7 @@ type ListIncidentsByOrganizationResponse struct {
 
 func (x *ListIncidentsByOrganizationResponse) Reset() {
 	*x = ListIncidentsByOrganizationResponse{}
-	mi := &file_core_proto_msgTypes[16]
+	mi := &file_core_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1171,7 +1287,7 @@ func (x *ListIncidentsByOrganizationResponse) String() string {
 func (*ListIncidentsByOrganizationResponse) ProtoMessage() {}
 
 func (x *ListIncidentsByOrganizationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[16]
+	mi := &file_core_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1184,7 +1300,7 @@ func (x *ListIncidentsByOrganizationResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use ListIncidentsByOrganizationResponse.ProtoReflect.Descriptor instead.
 func (*ListIncidentsByOrganizationResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{16}
+	return file_core_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ListIncidentsByOrganizationResponse) GetIncidents() []*Incident {
@@ -1204,7 +1320,7 @@ type GetComponentUptimeRequest struct {
 
 func (x *GetComponentUptimeRequest) Reset() {
 	*x = GetComponentUptimeRequest{}
-	mi := &file_core_proto_msgTypes[17]
+	mi := &file_core_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1216,7 +1332,7 @@ func (x *GetComponentUptimeRequest) String() string {
 func (*GetComponentUptimeRequest) ProtoMessage() {}
 
 func (x *GetComponentUptimeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[17]
+	mi := &file_core_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1229,7 +1345,7 @@ func (x *GetComponentUptimeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetComponentUptimeRequest.ProtoReflect.Descriptor instead.
 func (*GetComponentUptimeRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{17}
+	return file_core_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetComponentUptimeRequest) GetComponentId() string {
@@ -1255,7 +1371,7 @@ type GetComponentUptimeResponse struct {
 
 func (x *GetComponentUptimeResponse) Reset() {
 	*x = GetComponentUptimeResponse{}
-	mi := &file_core_proto_msgTypes[18]
+	mi := &file_core_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1267,7 +1383,7 @@ func (x *GetComponentUptimeResponse) String() string {
 func (*GetComponentUptimeResponse) ProtoMessage() {}
 
 func (x *GetComponentUptimeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[18]
+	mi := &file_core_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1280,7 +1396,7 @@ func (x *GetComponentUptimeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetComponentUptimeResponse.ProtoReflect.Descriptor instead.
 func (*GetComponentUptimeResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{18}
+	return file_core_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetComponentUptimeResponse) GetUptimes() []*UptimeDaily {
@@ -1298,7 +1414,7 @@ type ListActiveMonitorsRequest struct {
 
 func (x *ListActiveMonitorsRequest) Reset() {
 	*x = ListActiveMonitorsRequest{}
-	mi := &file_core_proto_msgTypes[19]
+	mi := &file_core_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1310,7 +1426,7 @@ func (x *ListActiveMonitorsRequest) String() string {
 func (*ListActiveMonitorsRequest) ProtoMessage() {}
 
 func (x *ListActiveMonitorsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[19]
+	mi := &file_core_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1323,7 +1439,7 @@ func (x *ListActiveMonitorsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListActiveMonitorsRequest.ProtoReflect.Descriptor instead.
 func (*ListActiveMonitorsRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{19}
+	return file_core_proto_rawDescGZIP(), []int{20}
 }
 
 type ListActiveMonitorsResponse struct {
@@ -1335,7 +1451,7 @@ type ListActiveMonitorsResponse struct {
 
 func (x *ListActiveMonitorsResponse) Reset() {
 	*x = ListActiveMonitorsResponse{}
-	mi := &file_core_proto_msgTypes[20]
+	mi := &file_core_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1347,7 +1463,7 @@ func (x *ListActiveMonitorsResponse) String() string {
 func (*ListActiveMonitorsResponse) ProtoMessage() {}
 
 func (x *ListActiveMonitorsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[20]
+	mi := &file_core_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1360,7 +1476,7 @@ func (x *ListActiveMonitorsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListActiveMonitorsResponse.ProtoReflect.Descriptor instead.
 func (*ListActiveMonitorsResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{20}
+	return file_core_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ListActiveMonitorsResponse) GetMonitors() []*Monitor {
@@ -1379,7 +1495,7 @@ type RecordPingResultRequest struct {
 
 func (x *RecordPingResultRequest) Reset() {
 	*x = RecordPingResultRequest{}
-	mi := &file_core_proto_msgTypes[21]
+	mi := &file_core_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1391,7 +1507,7 @@ func (x *RecordPingResultRequest) String() string {
 func (*RecordPingResultRequest) ProtoMessage() {}
 
 func (x *RecordPingResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[21]
+	mi := &file_core_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1404,7 +1520,7 @@ func (x *RecordPingResultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecordPingResultRequest.ProtoReflect.Descriptor instead.
 func (*RecordPingResultRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{21}
+	return file_core_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *RecordPingResultRequest) GetResult() *PingResult {
@@ -1422,7 +1538,7 @@ type RecordPingResultResponse struct {
 
 func (x *RecordPingResultResponse) Reset() {
 	*x = RecordPingResultResponse{}
-	mi := &file_core_proto_msgTypes[22]
+	mi := &file_core_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1434,7 +1550,7 @@ func (x *RecordPingResultResponse) String() string {
 func (*RecordPingResultResponse) ProtoMessage() {}
 
 func (x *RecordPingResultResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[22]
+	mi := &file_core_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1447,7 +1563,7 @@ func (x *RecordPingResultResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecordPingResultResponse.ProtoReflect.Descriptor instead.
 func (*RecordPingResultResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{22}
+	return file_core_proto_rawDescGZIP(), []int{23}
 }
 
 type UpdateComponentStatusRequest struct {
@@ -1460,7 +1576,7 @@ type UpdateComponentStatusRequest struct {
 
 func (x *UpdateComponentStatusRequest) Reset() {
 	*x = UpdateComponentStatusRequest{}
-	mi := &file_core_proto_msgTypes[23]
+	mi := &file_core_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1472,7 +1588,7 @@ func (x *UpdateComponentStatusRequest) String() string {
 func (*UpdateComponentStatusRequest) ProtoMessage() {}
 
 func (x *UpdateComponentStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[23]
+	mi := &file_core_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1485,7 +1601,7 @@ func (x *UpdateComponentStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateComponentStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateComponentStatusRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{23}
+	return file_core_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *UpdateComponentStatusRequest) GetComponentId() string {
@@ -1510,7 +1626,7 @@ type UpdateComponentStatusResponse struct {
 
 func (x *UpdateComponentStatusResponse) Reset() {
 	*x = UpdateComponentStatusResponse{}
-	mi := &file_core_proto_msgTypes[24]
+	mi := &file_core_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1522,7 +1638,7 @@ func (x *UpdateComponentStatusResponse) String() string {
 func (*UpdateComponentStatusResponse) ProtoMessage() {}
 
 func (x *UpdateComponentStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[24]
+	mi := &file_core_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1535,7 +1651,7 @@ func (x *UpdateComponentStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateComponentStatusResponse.ProtoReflect.Descriptor instead.
 func (*UpdateComponentStatusResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{24}
+	return file_core_proto_rawDescGZIP(), []int{25}
 }
 
 type CreateAutoIncidentRequest struct {
@@ -1549,7 +1665,7 @@ type CreateAutoIncidentRequest struct {
 
 func (x *CreateAutoIncidentRequest) Reset() {
 	*x = CreateAutoIncidentRequest{}
-	mi := &file_core_proto_msgTypes[25]
+	mi := &file_core_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1561,7 +1677,7 @@ func (x *CreateAutoIncidentRequest) String() string {
 func (*CreateAutoIncidentRequest) ProtoMessage() {}
 
 func (x *CreateAutoIncidentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[25]
+	mi := &file_core_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1574,7 +1690,7 @@ func (x *CreateAutoIncidentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAutoIncidentRequest.ProtoReflect.Descriptor instead.
 func (*CreateAutoIncidentRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{25}
+	return file_core_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *CreateAutoIncidentRequest) GetComponentId() string {
@@ -1607,7 +1723,7 @@ type CreateAutoIncidentResponse struct {
 
 func (x *CreateAutoIncidentResponse) Reset() {
 	*x = CreateAutoIncidentResponse{}
-	mi := &file_core_proto_msgTypes[26]
+	mi := &file_core_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1619,7 +1735,7 @@ func (x *CreateAutoIncidentResponse) String() string {
 func (*CreateAutoIncidentResponse) ProtoMessage() {}
 
 func (x *CreateAutoIncidentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[26]
+	mi := &file_core_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1632,7 +1748,7 @@ func (x *CreateAutoIncidentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAutoIncidentResponse.ProtoReflect.Descriptor instead.
 func (*CreateAutoIncidentResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{26}
+	return file_core_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *CreateAutoIncidentResponse) GetIncident() *Incident {
@@ -1651,7 +1767,7 @@ type CalculateUptimeDailyRequest struct {
 
 func (x *CalculateUptimeDailyRequest) Reset() {
 	*x = CalculateUptimeDailyRequest{}
-	mi := &file_core_proto_msgTypes[27]
+	mi := &file_core_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1663,7 +1779,7 @@ func (x *CalculateUptimeDailyRequest) String() string {
 func (*CalculateUptimeDailyRequest) ProtoMessage() {}
 
 func (x *CalculateUptimeDailyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[27]
+	mi := &file_core_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1676,7 +1792,7 @@ func (x *CalculateUptimeDailyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CalculateUptimeDailyRequest.ProtoReflect.Descriptor instead.
 func (*CalculateUptimeDailyRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{27}
+	return file_core_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *CalculateUptimeDailyRequest) GetDate() string {
@@ -1694,7 +1810,7 @@ type CalculateUptimeDailyResponse struct {
 
 func (x *CalculateUptimeDailyResponse) Reset() {
 	*x = CalculateUptimeDailyResponse{}
-	mi := &file_core_proto_msgTypes[28]
+	mi := &file_core_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1706,7 +1822,7 @@ func (x *CalculateUptimeDailyResponse) String() string {
 func (*CalculateUptimeDailyResponse) ProtoMessage() {}
 
 func (x *CalculateUptimeDailyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[28]
+	mi := &file_core_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1719,7 +1835,7 @@ func (x *CalculateUptimeDailyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CalculateUptimeDailyResponse.ProtoReflect.Descriptor instead.
 func (*CalculateUptimeDailyResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{28}
+	return file_core_proto_rawDescGZIP(), []int{29}
 }
 
 type ListPendingNotificationsRequest struct {
@@ -1731,7 +1847,7 @@ type ListPendingNotificationsRequest struct {
 
 func (x *ListPendingNotificationsRequest) Reset() {
 	*x = ListPendingNotificationsRequest{}
-	mi := &file_core_proto_msgTypes[29]
+	mi := &file_core_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1743,7 +1859,7 @@ func (x *ListPendingNotificationsRequest) String() string {
 func (*ListPendingNotificationsRequest) ProtoMessage() {}
 
 func (x *ListPendingNotificationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[29]
+	mi := &file_core_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1756,7 +1872,7 @@ func (x *ListPendingNotificationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPendingNotificationsRequest.ProtoReflect.Descriptor instead.
 func (*ListPendingNotificationsRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{29}
+	return file_core_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ListPendingNotificationsRequest) GetLimit() int32 {
@@ -1775,7 +1891,7 @@ type ListPendingNotificationsResponse struct {
 
 func (x *ListPendingNotificationsResponse) Reset() {
 	*x = ListPendingNotificationsResponse{}
-	mi := &file_core_proto_msgTypes[30]
+	mi := &file_core_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1787,7 +1903,7 @@ func (x *ListPendingNotificationsResponse) String() string {
 func (*ListPendingNotificationsResponse) ProtoMessage() {}
 
 func (x *ListPendingNotificationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[30]
+	mi := &file_core_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1800,7 +1916,7 @@ func (x *ListPendingNotificationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPendingNotificationsResponse.ProtoReflect.Descriptor instead.
 func (*ListPendingNotificationsResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{30}
+	return file_core_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *ListPendingNotificationsResponse) GetNotifications() []*Notification {
@@ -1814,13 +1930,14 @@ type UpdateNotificationStatusRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	NotificationId string                 `protobuf:"bytes,1,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty"`
 	Status         string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"` // sent, failed
+	ErrorMessage   string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *UpdateNotificationStatusRequest) Reset() {
 	*x = UpdateNotificationStatusRequest{}
-	mi := &file_core_proto_msgTypes[31]
+	mi := &file_core_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1832,7 +1949,7 @@ func (x *UpdateNotificationStatusRequest) String() string {
 func (*UpdateNotificationStatusRequest) ProtoMessage() {}
 
 func (x *UpdateNotificationStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[31]
+	mi := &file_core_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1845,7 +1962,7 @@ func (x *UpdateNotificationStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateNotificationStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateNotificationStatusRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{31}
+	return file_core_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *UpdateNotificationStatusRequest) GetNotificationId() string {
@@ -1862,6 +1979,13 @@ func (x *UpdateNotificationStatusRequest) GetStatus() string {
 	return ""
 }
 
+func (x *UpdateNotificationStatusRequest) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 type UpdateNotificationStatusResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1870,7 +1994,7 @@ type UpdateNotificationStatusResponse struct {
 
 func (x *UpdateNotificationStatusResponse) Reset() {
 	*x = UpdateNotificationStatusResponse{}
-	mi := &file_core_proto_msgTypes[32]
+	mi := &file_core_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1882,7 +2006,7 @@ func (x *UpdateNotificationStatusResponse) String() string {
 func (*UpdateNotificationStatusResponse) ProtoMessage() {}
 
 func (x *UpdateNotificationStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[32]
+	mi := &file_core_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1895,7 +2019,7 @@ func (x *UpdateNotificationStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateNotificationStatusResponse.ProtoReflect.Descriptor instead.
 func (*UpdateNotificationStatusResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{32}
+	return file_core_proto_rawDescGZIP(), []int{33}
 }
 
 type GetSubscribersByOrganizationRequest struct {
@@ -1907,7 +2031,7 @@ type GetSubscribersByOrganizationRequest struct {
 
 func (x *GetSubscribersByOrganizationRequest) Reset() {
 	*x = GetSubscribersByOrganizationRequest{}
-	mi := &file_core_proto_msgTypes[33]
+	mi := &file_core_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1919,7 +2043,7 @@ func (x *GetSubscribersByOrganizationRequest) String() string {
 func (*GetSubscribersByOrganizationRequest) ProtoMessage() {}
 
 func (x *GetSubscribersByOrganizationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[33]
+	mi := &file_core_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1932,7 +2056,7 @@ func (x *GetSubscribersByOrganizationRequest) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use GetSubscribersByOrganizationRequest.ProtoReflect.Descriptor instead.
 func (*GetSubscribersByOrganizationRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{33}
+	return file_core_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *GetSubscribersByOrganizationRequest) GetOrganizationId() string {
@@ -1951,7 +2075,7 @@ type GetSubscribersByOrganizationResponse struct {
 
 func (x *GetSubscribersByOrganizationResponse) Reset() {
 	*x = GetSubscribersByOrganizationResponse{}
-	mi := &file_core_proto_msgTypes[34]
+	mi := &file_core_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1963,7 +2087,7 @@ func (x *GetSubscribersByOrganizationResponse) String() string {
 func (*GetSubscribersByOrganizationResponse) ProtoMessage() {}
 
 func (x *GetSubscribersByOrganizationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[34]
+	mi := &file_core_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1976,7 +2100,7 @@ func (x *GetSubscribersByOrganizationResponse) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use GetSubscribersByOrganizationResponse.ProtoReflect.Descriptor instead.
 func (*GetSubscribersByOrganizationResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{34}
+	return file_core_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *GetSubscribersByOrganizationResponse) GetSubscribers() []*Subscriber {
@@ -1995,7 +2119,7 @@ type GetIncidentRequest struct {
 
 func (x *GetIncidentRequest) Reset() {
 	*x = GetIncidentRequest{}
-	mi := &file_core_proto_msgTypes[35]
+	mi := &file_core_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2007,7 +2131,7 @@ func (x *GetIncidentRequest) String() string {
 func (*GetIncidentRequest) ProtoMessage() {}
 
 func (x *GetIncidentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[35]
+	mi := &file_core_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2020,7 +2144,7 @@ func (x *GetIncidentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetIncidentRequest.ProtoReflect.Descriptor instead.
 func (*GetIncidentRequest) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{35}
+	return file_core_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *GetIncidentRequest) GetIncidentId() string {
@@ -2039,7 +2163,7 @@ type GetIncidentResponse struct {
 
 func (x *GetIncidentResponse) Reset() {
 	*x = GetIncidentResponse{}
-	mi := &file_core_proto_msgTypes[36]
+	mi := &file_core_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2051,7 +2175,7 @@ func (x *GetIncidentResponse) String() string {
 func (*GetIncidentResponse) ProtoMessage() {}
 
 func (x *GetIncidentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[36]
+	mi := &file_core_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2064,12 +2188,100 @@ func (x *GetIncidentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetIncidentResponse.ProtoReflect.Descriptor instead.
 func (*GetIncidentResponse) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{36}
+	return file_core_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *GetIncidentResponse) GetIncident() *Incident {
 	if x != nil {
 		return x.Incident
+	}
+	return nil
+}
+
+type GetNotificationChannelRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ChannelId     string                 `protobuf:"bytes,1,opt,name=channel_id,json=channelId,proto3" json:"channel_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetNotificationChannelRequest) Reset() {
+	*x = GetNotificationChannelRequest{}
+	mi := &file_core_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetNotificationChannelRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNotificationChannelRequest) ProtoMessage() {}
+
+func (x *GetNotificationChannelRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNotificationChannelRequest.ProtoReflect.Descriptor instead.
+func (*GetNotificationChannelRequest) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *GetNotificationChannelRequest) GetChannelId() string {
+	if x != nil {
+		return x.ChannelId
+	}
+	return ""
+}
+
+type GetNotificationChannelResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Channel       *NotificationChannel   `protobuf:"bytes,1,opt,name=channel,proto3" json:"channel,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetNotificationChannelResponse) Reset() {
+	*x = GetNotificationChannelResponse{}
+	mi := &file_core_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetNotificationChannelResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNotificationChannelResponse) ProtoMessage() {}
+
+func (x *GetNotificationChannelResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNotificationChannelResponse.ProtoReflect.Descriptor instead.
+func (*GetNotificationChannelResponse) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *GetNotificationChannelResponse) GetChannel() *NotificationChannel {
+	if x != nil {
+		return x.Channel
 	}
 	return nil
 }
@@ -2149,7 +2361,7 @@ const file_core_proto_rawDesc = "" +
 	"\x04date\x18\x02 \x01(\tR\x04date\x12!\n" +
 	"\ftotal_checks\x18\x03 \x01(\x05R\vtotalChecks\x12+\n" +
 	"\x11successful_checks\x18\x04 \x01(\x05R\x10successfulChecks\x12+\n" +
-	"\x11uptime_percentage\x18\x05 \x01(\x01R\x10uptimePercentage\"\x86\x02\n" +
+	"\x11uptime_percentage\x18\x05 \x01(\x01R\x10uptimePercentage\"\xe3\x02\n" +
 	"\fNotification\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\rsubscriber_id\x18\x02 \x01(\tR\fsubscriberId\x12\x1f\n" +
@@ -2159,7 +2371,21 @@ const file_core_proto_rawDesc = "" +
 	"\x06status\x18\x05 \x01(\tR\x06status\x129\n" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x123\n" +
-	"\asent_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x06sentAt\"\xe1\x01\n" +
+	"\asent_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x06sentAt\x126\n" +
+	"\x17notification_channel_id\x18\b \x01(\tR\x15notificationChannelId\x12#\n" +
+	"\rerror_message\x18\t \x01(\tR\ferrorMessage\"\xa7\x02\n" +
+	"\x13NotificationChannel\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
+	"\x0forganization_id\x18\x02 \x01(\tR\x0eorganizationId\x12\x12\n" +
+	"\x04type\x18\x03 \x01(\tR\x04type\x12\x12\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\x12\x1f\n" +
+	"\vconfig_json\x18\x05 \x01(\tR\n" +
+	"configJson\x12\x18\n" +
+	"\aenabled\x18\x06 \x01(\bR\aenabled\x129\n" +
+	"\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xe1\x01\n" +
 	"\n" +
 	"PingResult\x12\x1d\n" +
 	"\n" +
@@ -2217,10 +2443,11 @@ const file_core_proto_rawDesc = "" +
 	"\x1fListPendingNotificationsRequest\x12\x14\n" +
 	"\x05limit\x18\x01 \x01(\x05R\x05limit\"^\n" +
 	" ListPendingNotificationsResponse\x12:\n" +
-	"\rnotifications\x18\x01 \x03(\v2\x14.corepb.NotificationR\rnotifications\"b\n" +
+	"\rnotifications\x18\x01 \x03(\v2\x14.corepb.NotificationR\rnotifications\"\x87\x01\n" +
 	"\x1fUpdateNotificationStatusRequest\x12'\n" +
 	"\x0fnotification_id\x18\x01 \x01(\tR\x0enotificationId\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\"\"\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"\"\n" +
 	" UpdateNotificationStatusResponse\"N\n" +
 	"#GetSubscribersByOrganizationRequest\x12'\n" +
 	"\x0forganization_id\x18\x01 \x01(\tR\x0eorganizationId\"\\\n" +
@@ -2230,7 +2457,12 @@ const file_core_proto_rawDesc = "" +
 	"\vincident_id\x18\x01 \x01(\tR\n" +
 	"incidentId\"C\n" +
 	"\x13GetIncidentResponse\x12,\n" +
-	"\bincident\x18\x01 \x01(\v2\x10.corepb.IncidentR\bincident2\x8b\x05\n" +
+	"\bincident\x18\x01 \x01(\v2\x10.corepb.IncidentR\bincident\">\n" +
+	"\x1dGetNotificationChannelRequest\x12\x1d\n" +
+	"\n" +
+	"channel_id\x18\x01 \x01(\tR\tchannelId\"W\n" +
+	"\x1eGetNotificationChannelResponse\x125\n" +
+	"\achannel\x18\x01 \x01(\v2\x1b.corepb.NotificationChannelR\achannel2\x8b\x05\n" +
 	"\rStatusService\x12d\n" +
 	"\x15GetOrganizationBySlug\x12$.corepb.GetOrganizationBySlugRequest\x1a%.corepb.GetOrganizationBySlugResponse\x12|\n" +
 	"\x1dGetOrganizationByCustomDomain\x12,.corepb.GetOrganizationByCustomDomainRequest\x1a-.corepb.GetOrganizationByCustomDomainResponse\x12y\n" +
@@ -2243,12 +2475,13 @@ const file_core_proto_rawDesc = "" +
 	"\x10RecordPingResult\x12\x1f.corepb.RecordPingResultRequest\x1a .corepb.RecordPingResultResponse\x12d\n" +
 	"\x15UpdateComponentStatus\x12$.corepb.UpdateComponentStatusRequest\x1a%.corepb.UpdateComponentStatusResponse\x12[\n" +
 	"\x12CreateAutoIncident\x12!.corepb.CreateAutoIncidentRequest\x1a\".corepb.CreateAutoIncidentResponse\x12a\n" +
-	"\x14CalculateUptimeDaily\x12#.corepb.CalculateUptimeDailyRequest\x1a$.corepb.CalculateUptimeDailyResponse2\xb1\x03\n" +
+	"\x14CalculateUptimeDaily\x12#.corepb.CalculateUptimeDailyRequest\x1a$.corepb.CalculateUptimeDailyResponse2\x9a\x04\n" +
 	"\x0eAlerterService\x12m\n" +
 	"\x18ListPendingNotifications\x12'.corepb.ListPendingNotificationsRequest\x1a(.corepb.ListPendingNotificationsResponse\x12m\n" +
 	"\x18UpdateNotificationStatus\x12'.corepb.UpdateNotificationStatusRequest\x1a(.corepb.UpdateNotificationStatusResponse\x12y\n" +
 	"\x1cGetSubscribersByOrganization\x12+.corepb.GetSubscribersByOrganizationRequest\x1a,.corepb.GetSubscribersByOrganizationResponse\x12F\n" +
-	"\vGetIncident\x12\x1a.corepb.GetIncidentRequest\x1a\x1b.corepb.GetIncidentResponseB+Z)github.com/pingpage-live/proto/gen/corepbb\x06proto3"
+	"\vGetIncident\x12\x1a.corepb.GetIncidentRequest\x1a\x1b.corepb.GetIncidentResponse\x12g\n" +
+	"\x16GetNotificationChannel\x12%.corepb.GetNotificationChannelRequest\x1a&.corepb.GetNotificationChannelResponseB+Z)github.com/pingpage-live/proto/gen/corepbb\x06proto3"
 
 var (
 	file_core_proto_rawDescOnce sync.Once
@@ -2262,7 +2495,7 @@ func file_core_proto_rawDescGZIP() []byte {
 	return file_core_proto_rawDescData
 }
 
-var file_core_proto_msgTypes = make([]protoimpl.MessageInfo, 37)
+var file_core_proto_msgTypes = make([]protoimpl.MessageInfo, 40)
 var file_core_proto_goTypes = []any{
 	(*Organization)(nil),                          // 0: corepb.Organization
 	(*Component)(nil),                             // 1: corepb.Component
@@ -2272,100 +2505,108 @@ var file_core_proto_goTypes = []any{
 	(*Monitor)(nil),                               // 5: corepb.Monitor
 	(*UptimeDaily)(nil),                           // 6: corepb.UptimeDaily
 	(*Notification)(nil),                          // 7: corepb.Notification
-	(*PingResult)(nil),                            // 8: corepb.PingResult
-	(*GetOrganizationBySlugRequest)(nil),          // 9: corepb.GetOrganizationBySlugRequest
-	(*GetOrganizationBySlugResponse)(nil),         // 10: corepb.GetOrganizationBySlugResponse
-	(*GetOrganizationByCustomDomainRequest)(nil),  // 11: corepb.GetOrganizationByCustomDomainRequest
-	(*GetOrganizationByCustomDomainResponse)(nil), // 12: corepb.GetOrganizationByCustomDomainResponse
-	(*ListComponentsByOrganizationRequest)(nil),   // 13: corepb.ListComponentsByOrganizationRequest
-	(*ListComponentsByOrganizationResponse)(nil),  // 14: corepb.ListComponentsByOrganizationResponse
-	(*ListIncidentsByOrganizationRequest)(nil),    // 15: corepb.ListIncidentsByOrganizationRequest
-	(*ListIncidentsByOrganizationResponse)(nil),   // 16: corepb.ListIncidentsByOrganizationResponse
-	(*GetComponentUptimeRequest)(nil),             // 17: corepb.GetComponentUptimeRequest
-	(*GetComponentUptimeResponse)(nil),            // 18: corepb.GetComponentUptimeResponse
-	(*ListActiveMonitorsRequest)(nil),             // 19: corepb.ListActiveMonitorsRequest
-	(*ListActiveMonitorsResponse)(nil),            // 20: corepb.ListActiveMonitorsResponse
-	(*RecordPingResultRequest)(nil),               // 21: corepb.RecordPingResultRequest
-	(*RecordPingResultResponse)(nil),              // 22: corepb.RecordPingResultResponse
-	(*UpdateComponentStatusRequest)(nil),          // 23: corepb.UpdateComponentStatusRequest
-	(*UpdateComponentStatusResponse)(nil),         // 24: corepb.UpdateComponentStatusResponse
-	(*CreateAutoIncidentRequest)(nil),             // 25: corepb.CreateAutoIncidentRequest
-	(*CreateAutoIncidentResponse)(nil),            // 26: corepb.CreateAutoIncidentResponse
-	(*CalculateUptimeDailyRequest)(nil),           // 27: corepb.CalculateUptimeDailyRequest
-	(*CalculateUptimeDailyResponse)(nil),          // 28: corepb.CalculateUptimeDailyResponse
-	(*ListPendingNotificationsRequest)(nil),       // 29: corepb.ListPendingNotificationsRequest
-	(*ListPendingNotificationsResponse)(nil),      // 30: corepb.ListPendingNotificationsResponse
-	(*UpdateNotificationStatusRequest)(nil),       // 31: corepb.UpdateNotificationStatusRequest
-	(*UpdateNotificationStatusResponse)(nil),      // 32: corepb.UpdateNotificationStatusResponse
-	(*GetSubscribersByOrganizationRequest)(nil),   // 33: corepb.GetSubscribersByOrganizationRequest
-	(*GetSubscribersByOrganizationResponse)(nil),  // 34: corepb.GetSubscribersByOrganizationResponse
-	(*GetIncidentRequest)(nil),                    // 35: corepb.GetIncidentRequest
-	(*GetIncidentResponse)(nil),                   // 36: corepb.GetIncidentResponse
-	(*timestamppb.Timestamp)(nil),                 // 37: google.protobuf.Timestamp
+	(*NotificationChannel)(nil),                   // 8: corepb.NotificationChannel
+	(*PingResult)(nil),                            // 9: corepb.PingResult
+	(*GetOrganizationBySlugRequest)(nil),          // 10: corepb.GetOrganizationBySlugRequest
+	(*GetOrganizationBySlugResponse)(nil),         // 11: corepb.GetOrganizationBySlugResponse
+	(*GetOrganizationByCustomDomainRequest)(nil),  // 12: corepb.GetOrganizationByCustomDomainRequest
+	(*GetOrganizationByCustomDomainResponse)(nil), // 13: corepb.GetOrganizationByCustomDomainResponse
+	(*ListComponentsByOrganizationRequest)(nil),   // 14: corepb.ListComponentsByOrganizationRequest
+	(*ListComponentsByOrganizationResponse)(nil),  // 15: corepb.ListComponentsByOrganizationResponse
+	(*ListIncidentsByOrganizationRequest)(nil),    // 16: corepb.ListIncidentsByOrganizationRequest
+	(*ListIncidentsByOrganizationResponse)(nil),   // 17: corepb.ListIncidentsByOrganizationResponse
+	(*GetComponentUptimeRequest)(nil),             // 18: corepb.GetComponentUptimeRequest
+	(*GetComponentUptimeResponse)(nil),            // 19: corepb.GetComponentUptimeResponse
+	(*ListActiveMonitorsRequest)(nil),             // 20: corepb.ListActiveMonitorsRequest
+	(*ListActiveMonitorsResponse)(nil),            // 21: corepb.ListActiveMonitorsResponse
+	(*RecordPingResultRequest)(nil),               // 22: corepb.RecordPingResultRequest
+	(*RecordPingResultResponse)(nil),              // 23: corepb.RecordPingResultResponse
+	(*UpdateComponentStatusRequest)(nil),          // 24: corepb.UpdateComponentStatusRequest
+	(*UpdateComponentStatusResponse)(nil),         // 25: corepb.UpdateComponentStatusResponse
+	(*CreateAutoIncidentRequest)(nil),             // 26: corepb.CreateAutoIncidentRequest
+	(*CreateAutoIncidentResponse)(nil),            // 27: corepb.CreateAutoIncidentResponse
+	(*CalculateUptimeDailyRequest)(nil),           // 28: corepb.CalculateUptimeDailyRequest
+	(*CalculateUptimeDailyResponse)(nil),          // 29: corepb.CalculateUptimeDailyResponse
+	(*ListPendingNotificationsRequest)(nil),       // 30: corepb.ListPendingNotificationsRequest
+	(*ListPendingNotificationsResponse)(nil),      // 31: corepb.ListPendingNotificationsResponse
+	(*UpdateNotificationStatusRequest)(nil),       // 32: corepb.UpdateNotificationStatusRequest
+	(*UpdateNotificationStatusResponse)(nil),      // 33: corepb.UpdateNotificationStatusResponse
+	(*GetSubscribersByOrganizationRequest)(nil),   // 34: corepb.GetSubscribersByOrganizationRequest
+	(*GetSubscribersByOrganizationResponse)(nil),  // 35: corepb.GetSubscribersByOrganizationResponse
+	(*GetIncidentRequest)(nil),                    // 36: corepb.GetIncidentRequest
+	(*GetIncidentResponse)(nil),                   // 37: corepb.GetIncidentResponse
+	(*GetNotificationChannelRequest)(nil),         // 38: corepb.GetNotificationChannelRequest
+	(*GetNotificationChannelResponse)(nil),        // 39: corepb.GetNotificationChannelResponse
+	(*timestamppb.Timestamp)(nil),                 // 40: google.protobuf.Timestamp
 }
 var file_core_proto_depIdxs = []int32{
-	37, // 0: corepb.Organization.created_at:type_name -> google.protobuf.Timestamp
-	37, // 1: corepb.Organization.updated_at:type_name -> google.protobuf.Timestamp
-	37, // 2: corepb.Component.created_at:type_name -> google.protobuf.Timestamp
-	37, // 3: corepb.Component.updated_at:type_name -> google.protobuf.Timestamp
-	37, // 4: corepb.Incident.started_at:type_name -> google.protobuf.Timestamp
-	37, // 5: corepb.Incident.resolved_at:type_name -> google.protobuf.Timestamp
-	37, // 6: corepb.Incident.created_at:type_name -> google.protobuf.Timestamp
-	37, // 7: corepb.Incident.updated_at:type_name -> google.protobuf.Timestamp
+	40, // 0: corepb.Organization.created_at:type_name -> google.protobuf.Timestamp
+	40, // 1: corepb.Organization.updated_at:type_name -> google.protobuf.Timestamp
+	40, // 2: corepb.Component.created_at:type_name -> google.protobuf.Timestamp
+	40, // 3: corepb.Component.updated_at:type_name -> google.protobuf.Timestamp
+	40, // 4: corepb.Incident.started_at:type_name -> google.protobuf.Timestamp
+	40, // 5: corepb.Incident.resolved_at:type_name -> google.protobuf.Timestamp
+	40, // 6: corepb.Incident.created_at:type_name -> google.protobuf.Timestamp
+	40, // 7: corepb.Incident.updated_at:type_name -> google.protobuf.Timestamp
 	3,  // 8: corepb.Incident.updates:type_name -> corepb.IncidentUpdate
-	37, // 9: corepb.IncidentUpdate.created_at:type_name -> google.protobuf.Timestamp
-	37, // 10: corepb.Subscriber.created_at:type_name -> google.protobuf.Timestamp
-	37, // 11: corepb.Monitor.created_at:type_name -> google.protobuf.Timestamp
-	37, // 12: corepb.Monitor.updated_at:type_name -> google.protobuf.Timestamp
-	37, // 13: corepb.Notification.created_at:type_name -> google.protobuf.Timestamp
-	37, // 14: corepb.Notification.sent_at:type_name -> google.protobuf.Timestamp
-	37, // 15: corepb.PingResult.checked_at:type_name -> google.protobuf.Timestamp
-	0,  // 16: corepb.GetOrganizationBySlugResponse.organization:type_name -> corepb.Organization
-	0,  // 17: corepb.GetOrganizationByCustomDomainResponse.organization:type_name -> corepb.Organization
-	1,  // 18: corepb.ListComponentsByOrganizationResponse.components:type_name -> corepb.Component
-	2,  // 19: corepb.ListIncidentsByOrganizationResponse.incidents:type_name -> corepb.Incident
-	6,  // 20: corepb.GetComponentUptimeResponse.uptimes:type_name -> corepb.UptimeDaily
-	5,  // 21: corepb.ListActiveMonitorsResponse.monitors:type_name -> corepb.Monitor
-	8,  // 22: corepb.RecordPingResultRequest.result:type_name -> corepb.PingResult
-	2,  // 23: corepb.CreateAutoIncidentResponse.incident:type_name -> corepb.Incident
-	7,  // 24: corepb.ListPendingNotificationsResponse.notifications:type_name -> corepb.Notification
-	4,  // 25: corepb.GetSubscribersByOrganizationResponse.subscribers:type_name -> corepb.Subscriber
-	2,  // 26: corepb.GetIncidentResponse.incident:type_name -> corepb.Incident
-	9,  // 27: corepb.StatusService.GetOrganizationBySlug:input_type -> corepb.GetOrganizationBySlugRequest
-	11, // 28: corepb.StatusService.GetOrganizationByCustomDomain:input_type -> corepb.GetOrganizationByCustomDomainRequest
-	13, // 29: corepb.StatusService.ListComponentsByOrganization:input_type -> corepb.ListComponentsByOrganizationRequest
-	15, // 30: corepb.StatusService.ListIncidentsByOrganization:input_type -> corepb.ListIncidentsByOrganizationRequest
-	17, // 31: corepb.StatusService.GetComponentUptime:input_type -> corepb.GetComponentUptimeRequest
-	35, // 32: corepb.StatusService.GetIncident:input_type -> corepb.GetIncidentRequest
-	19, // 33: corepb.WorkerService.ListActiveMonitors:input_type -> corepb.ListActiveMonitorsRequest
-	21, // 34: corepb.WorkerService.RecordPingResult:input_type -> corepb.RecordPingResultRequest
-	23, // 35: corepb.WorkerService.UpdateComponentStatus:input_type -> corepb.UpdateComponentStatusRequest
-	25, // 36: corepb.WorkerService.CreateAutoIncident:input_type -> corepb.CreateAutoIncidentRequest
-	27, // 37: corepb.WorkerService.CalculateUptimeDaily:input_type -> corepb.CalculateUptimeDailyRequest
-	29, // 38: corepb.AlerterService.ListPendingNotifications:input_type -> corepb.ListPendingNotificationsRequest
-	31, // 39: corepb.AlerterService.UpdateNotificationStatus:input_type -> corepb.UpdateNotificationStatusRequest
-	33, // 40: corepb.AlerterService.GetSubscribersByOrganization:input_type -> corepb.GetSubscribersByOrganizationRequest
-	35, // 41: corepb.AlerterService.GetIncident:input_type -> corepb.GetIncidentRequest
-	10, // 42: corepb.StatusService.GetOrganizationBySlug:output_type -> corepb.GetOrganizationBySlugResponse
-	12, // 43: corepb.StatusService.GetOrganizationByCustomDomain:output_type -> corepb.GetOrganizationByCustomDomainResponse
-	14, // 44: corepb.StatusService.ListComponentsByOrganization:output_type -> corepb.ListComponentsByOrganizationResponse
-	16, // 45: corepb.StatusService.ListIncidentsByOrganization:output_type -> corepb.ListIncidentsByOrganizationResponse
-	18, // 46: corepb.StatusService.GetComponentUptime:output_type -> corepb.GetComponentUptimeResponse
-	36, // 47: corepb.StatusService.GetIncident:output_type -> corepb.GetIncidentResponse
-	20, // 48: corepb.WorkerService.ListActiveMonitors:output_type -> corepb.ListActiveMonitorsResponse
-	22, // 49: corepb.WorkerService.RecordPingResult:output_type -> corepb.RecordPingResultResponse
-	24, // 50: corepb.WorkerService.UpdateComponentStatus:output_type -> corepb.UpdateComponentStatusResponse
-	26, // 51: corepb.WorkerService.CreateAutoIncident:output_type -> corepb.CreateAutoIncidentResponse
-	28, // 52: corepb.WorkerService.CalculateUptimeDaily:output_type -> corepb.CalculateUptimeDailyResponse
-	30, // 53: corepb.AlerterService.ListPendingNotifications:output_type -> corepb.ListPendingNotificationsResponse
-	32, // 54: corepb.AlerterService.UpdateNotificationStatus:output_type -> corepb.UpdateNotificationStatusResponse
-	34, // 55: corepb.AlerterService.GetSubscribersByOrganization:output_type -> corepb.GetSubscribersByOrganizationResponse
-	36, // 56: corepb.AlerterService.GetIncident:output_type -> corepb.GetIncidentResponse
-	42, // [42:57] is the sub-list for method output_type
-	27, // [27:42] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	40, // 9: corepb.IncidentUpdate.created_at:type_name -> google.protobuf.Timestamp
+	40, // 10: corepb.Subscriber.created_at:type_name -> google.protobuf.Timestamp
+	40, // 11: corepb.Monitor.created_at:type_name -> google.protobuf.Timestamp
+	40, // 12: corepb.Monitor.updated_at:type_name -> google.protobuf.Timestamp
+	40, // 13: corepb.Notification.created_at:type_name -> google.protobuf.Timestamp
+	40, // 14: corepb.Notification.sent_at:type_name -> google.protobuf.Timestamp
+	40, // 15: corepb.NotificationChannel.created_at:type_name -> google.protobuf.Timestamp
+	40, // 16: corepb.NotificationChannel.updated_at:type_name -> google.protobuf.Timestamp
+	40, // 17: corepb.PingResult.checked_at:type_name -> google.protobuf.Timestamp
+	0,  // 18: corepb.GetOrganizationBySlugResponse.organization:type_name -> corepb.Organization
+	0,  // 19: corepb.GetOrganizationByCustomDomainResponse.organization:type_name -> corepb.Organization
+	1,  // 20: corepb.ListComponentsByOrganizationResponse.components:type_name -> corepb.Component
+	2,  // 21: corepb.ListIncidentsByOrganizationResponse.incidents:type_name -> corepb.Incident
+	6,  // 22: corepb.GetComponentUptimeResponse.uptimes:type_name -> corepb.UptimeDaily
+	5,  // 23: corepb.ListActiveMonitorsResponse.monitors:type_name -> corepb.Monitor
+	9,  // 24: corepb.RecordPingResultRequest.result:type_name -> corepb.PingResult
+	2,  // 25: corepb.CreateAutoIncidentResponse.incident:type_name -> corepb.Incident
+	7,  // 26: corepb.ListPendingNotificationsResponse.notifications:type_name -> corepb.Notification
+	4,  // 27: corepb.GetSubscribersByOrganizationResponse.subscribers:type_name -> corepb.Subscriber
+	2,  // 28: corepb.GetIncidentResponse.incident:type_name -> corepb.Incident
+	8,  // 29: corepb.GetNotificationChannelResponse.channel:type_name -> corepb.NotificationChannel
+	10, // 30: corepb.StatusService.GetOrganizationBySlug:input_type -> corepb.GetOrganizationBySlugRequest
+	12, // 31: corepb.StatusService.GetOrganizationByCustomDomain:input_type -> corepb.GetOrganizationByCustomDomainRequest
+	14, // 32: corepb.StatusService.ListComponentsByOrganization:input_type -> corepb.ListComponentsByOrganizationRequest
+	16, // 33: corepb.StatusService.ListIncidentsByOrganization:input_type -> corepb.ListIncidentsByOrganizationRequest
+	18, // 34: corepb.StatusService.GetComponentUptime:input_type -> corepb.GetComponentUptimeRequest
+	36, // 35: corepb.StatusService.GetIncident:input_type -> corepb.GetIncidentRequest
+	20, // 36: corepb.WorkerService.ListActiveMonitors:input_type -> corepb.ListActiveMonitorsRequest
+	22, // 37: corepb.WorkerService.RecordPingResult:input_type -> corepb.RecordPingResultRequest
+	24, // 38: corepb.WorkerService.UpdateComponentStatus:input_type -> corepb.UpdateComponentStatusRequest
+	26, // 39: corepb.WorkerService.CreateAutoIncident:input_type -> corepb.CreateAutoIncidentRequest
+	28, // 40: corepb.WorkerService.CalculateUptimeDaily:input_type -> corepb.CalculateUptimeDailyRequest
+	30, // 41: corepb.AlerterService.ListPendingNotifications:input_type -> corepb.ListPendingNotificationsRequest
+	32, // 42: corepb.AlerterService.UpdateNotificationStatus:input_type -> corepb.UpdateNotificationStatusRequest
+	34, // 43: corepb.AlerterService.GetSubscribersByOrganization:input_type -> corepb.GetSubscribersByOrganizationRequest
+	36, // 44: corepb.AlerterService.GetIncident:input_type -> corepb.GetIncidentRequest
+	38, // 45: corepb.AlerterService.GetNotificationChannel:input_type -> corepb.GetNotificationChannelRequest
+	11, // 46: corepb.StatusService.GetOrganizationBySlug:output_type -> corepb.GetOrganizationBySlugResponse
+	13, // 47: corepb.StatusService.GetOrganizationByCustomDomain:output_type -> corepb.GetOrganizationByCustomDomainResponse
+	15, // 48: corepb.StatusService.ListComponentsByOrganization:output_type -> corepb.ListComponentsByOrganizationResponse
+	17, // 49: corepb.StatusService.ListIncidentsByOrganization:output_type -> corepb.ListIncidentsByOrganizationResponse
+	19, // 50: corepb.StatusService.GetComponentUptime:output_type -> corepb.GetComponentUptimeResponse
+	37, // 51: corepb.StatusService.GetIncident:output_type -> corepb.GetIncidentResponse
+	21, // 52: corepb.WorkerService.ListActiveMonitors:output_type -> corepb.ListActiveMonitorsResponse
+	23, // 53: corepb.WorkerService.RecordPingResult:output_type -> corepb.RecordPingResultResponse
+	25, // 54: corepb.WorkerService.UpdateComponentStatus:output_type -> corepb.UpdateComponentStatusResponse
+	27, // 55: corepb.WorkerService.CreateAutoIncident:output_type -> corepb.CreateAutoIncidentResponse
+	29, // 56: corepb.WorkerService.CalculateUptimeDaily:output_type -> corepb.CalculateUptimeDailyResponse
+	31, // 57: corepb.AlerterService.ListPendingNotifications:output_type -> corepb.ListPendingNotificationsResponse
+	33, // 58: corepb.AlerterService.UpdateNotificationStatus:output_type -> corepb.UpdateNotificationStatusResponse
+	35, // 59: corepb.AlerterService.GetSubscribersByOrganization:output_type -> corepb.GetSubscribersByOrganizationResponse
+	37, // 60: corepb.AlerterService.GetIncident:output_type -> corepb.GetIncidentResponse
+	39, // 61: corepb.AlerterService.GetNotificationChannel:output_type -> corepb.GetNotificationChannelResponse
+	46, // [46:62] is the sub-list for method output_type
+	30, // [30:46] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_core_proto_init() }
@@ -2379,7 +2620,7 @@ func file_core_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_proto_rawDesc), len(file_core_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   37,
+			NumMessages:   40,
 			NumExtensions: 0,
 			NumServices:   3,
 		},
