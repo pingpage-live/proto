@@ -169,6 +169,7 @@ service WorkerService {
   rpc RecordPingResult(RecordPingResultRequest) returns (RecordPingResultResponse);
   rpc UpdateComponentStatus(UpdateComponentStatusRequest) returns (UpdateComponentStatusResponse);
   rpc CreateAutoIncident(CreateAutoIncidentRequest) returns (CreateAutoIncidentResponse);
+  rpc ResolveAutoIncident(ResolveAutoIncidentRequest) returns (ResolveAutoIncidentResponse);
   rpc CalculateUptimeDaily(CalculateUptimeDailyRequest) returns (CalculateUptimeDailyResponse);
 }
 
@@ -199,6 +200,14 @@ message CreateAutoIncidentRequest {
 
 message CreateAutoIncidentResponse {
   Incident incident = 1;
+}
+
+message ResolveAutoIncidentRequest {
+  string component_id = 1;
+}
+
+message ResolveAutoIncidentResponse {
+  int32 resolved_count = 1;
 }
 
 message CalculateUptimeDailyRequest {
