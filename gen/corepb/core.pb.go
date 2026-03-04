@@ -23,14 +23,20 @@ const (
 )
 
 type Organization struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Slug          string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name            string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Slug            string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	LogoUrl         string                 `protobuf:"bytes,6,opt,name=logo_url,json=logoUrl,proto3" json:"logo_url,omitempty"`
+	BrandColor      string                 `protobuf:"bytes,7,opt,name=brand_color,json=brandColor,proto3" json:"brand_color,omitempty"`
+	FaviconUrl      string                 `protobuf:"bytes,8,opt,name=favicon_url,json=faviconUrl,proto3" json:"favicon_url,omitempty"`
+	PageTitle       string                 `protobuf:"bytes,9,opt,name=page_title,json=pageTitle,proto3" json:"page_title,omitempty"`
+	PageDescription string                 `protobuf:"bytes,10,opt,name=page_description,json=pageDescription,proto3" json:"page_description,omitempty"`
+	CustomLinksJson string                 `protobuf:"bytes,11,opt,name=custom_links_json,json=customLinksJson,proto3" json:"custom_links_json,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Organization) Reset() {
@@ -96,6 +102,48 @@ func (x *Organization) GetUpdatedAt() *timestamppb.Timestamp {
 		return x.UpdatedAt
 	}
 	return nil
+}
+
+func (x *Organization) GetLogoUrl() string {
+	if x != nil {
+		return x.LogoUrl
+	}
+	return ""
+}
+
+func (x *Organization) GetBrandColor() string {
+	if x != nil {
+		return x.BrandColor
+	}
+	return ""
+}
+
+func (x *Organization) GetFaviconUrl() string {
+	if x != nil {
+		return x.FaviconUrl
+	}
+	return ""
+}
+
+func (x *Organization) GetPageTitle() string {
+	if x != nil {
+		return x.PageTitle
+	}
+	return ""
+}
+
+func (x *Organization) GetPageDescription() string {
+	if x != nil {
+		return x.PageDescription
+	}
+	return ""
+}
+
+func (x *Organization) GetCustomLinksJson() string {
+	if x != nil {
+		return x.CustomLinksJson
+	}
+	return ""
 }
 
 type Component struct {
@@ -2379,7 +2427,7 @@ var File_core_proto protoreflect.FileDescriptor
 const file_core_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"core.proto\x12\x06corepb\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbc\x01\n" +
+	"core.proto\x12\x06corepb\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8f\x03\n" +
 	"\fOrganization\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -2387,7 +2435,17 @@ const file_core_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa4\x02\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x19\n" +
+	"\blogo_url\x18\x06 \x01(\tR\alogoUrl\x12\x1f\n" +
+	"\vbrand_color\x18\a \x01(\tR\n" +
+	"brandColor\x12\x1f\n" +
+	"\vfavicon_url\x18\b \x01(\tR\n" +
+	"faviconUrl\x12\x1d\n" +
+	"\n" +
+	"page_title\x18\t \x01(\tR\tpageTitle\x12)\n" +
+	"\x10page_description\x18\n" +
+	" \x01(\tR\x0fpageDescription\x12*\n" +
+	"\x11custom_links_json\x18\v \x01(\tR\x0fcustomLinksJson\"\xa4\x02\n" +
 	"\tComponent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\x0forganization_id\x18\x02 \x01(\tR\x0eorganizationId\x12\x12\n" +
